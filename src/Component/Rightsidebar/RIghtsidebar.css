@@ -1,0 +1,68 @@
+.rs{
+    color: white;
+    background-color: #001030;
+    height: 75vh;
+    position: relative;
+    overflow-y: scroll;
+}
+.rs-profile{
+    padding-top: 60px;
+    text-align: center;
+    margin: auto;
+    max-width: 70%;
+
+}
+.rs-profile img{
+    width: 110px;
+    border-radius: 50%;
+    aspect-ratio: 1/1;
+}
+.rs-profile h3{
+    font-size: 18px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px 0px;
+    gap: 5px;
+}
+.rs-profile p{
+    font-size: 10px;
+    opacity: 80%;
+    font-weight: 300;
+}
+.rs hr{
+    margin: 15px 0;
+    color: #ffffff50;
+}
+.rs-media{
+    padding: 0px 20px;
+    font-size: 13px;
+}
+.rs-media div{
+    max-height: 180px;
+    overflow-x: scroll;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 5px;
+    margin-top: 8px;
+}
+.rs-media div img{
+    width: 60px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.rs button{
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    cursor: pointer;
+    background: #077eff;
+    transform: translatex(-50%);
+    color: white;
+    padding: 10px;
+    border: none;
+    font-size: 12px;
+    border-radius: 20px;
+
+}
