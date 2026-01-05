@@ -3,7 +3,7 @@ import Leftsidebar from '../../Component/Leftsidebar/Leftsidebar'
 import Rightsidebar from '../../Component/Rightsidebar/Rightsidebar'
 import { useLocation } from "react-router-dom";
 
-import './Chat.css'
+import './chat.css'
 
 const Chat = () => {
     const location = useLocation();
