@@ -1,7 +1,7 @@
 .rs{
     color: white;
     background-color: #001030;
-    height: 75vh;
+    height: 100%;
     position: relative;
     overflow-y: scroll;
     overflow-x: hidden;

@@ -115,12 +115,15 @@ function Chatbox({ chatId, chatUser, goBack, openInfo }) {
       </div>
 
       {/* IMAGE PREVIEW */}
-      {imageFile && (
-        <div className="image-preview">
-          <p>Preview:</p>
-          <img src={URL.createObjectURL(imageFile)} alt="preview" className="preview-img" />
-        </div>
-      )}
+      {/* IMAGE PREVIEW */}
+{imageFile && (
+  <div className="image-preview">
+    <p>Preview:</p>
+    <img src={URL.createObjectURL(imageFile)} alt="preview" className="preview-img" />
+    <button className="remove-preview" onClick={() => setImageFile(null)}>×</button>
+  </div>
+)}
+
 
       {/* INPUT */}
       <div className="chat-input">
