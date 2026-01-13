@@ -1,4 +1,5 @@
 import './Leftsidebar.css';
+import { useNavigate } from 'react-router-dom';
 import assets from '../../assets/assets/assets';
 import { useState, useEffect } from 'react';
 import { useUser } from '../../Context/UserContext';
@@ -9,9 +10,14 @@ function Leftsidebar({ onFriendClick }) {
   const { logout, profile, addFriend } = useUser();
   const [showMenu, setShowMenu] = useState(false);
   const [friends, setFriends] = useState([]);
+  const navigate= useNavigate();
 
   // Toggle dropdown
   const handleToggleMenu = () => setShowMenu(prev => !prev);
+  const handleEditProfile = () => {
+    navigate('/profile');
+    setShowMenu(false);
+  };
 
   // Load friends
   useEffect(() => {
@@ -82,7 +88,7 @@ function Leftsidebar({ onFriendClick }) {
             <img src={assets.menu_icon} className="menu-icon" alt="Menu Icon" onClick={handleToggleMenu} />
             {showMenu && (
               <div className="sub-menu">
-                <p>Edit Profile</p>
+                <p onClick={handleEditProfile}>Edit Profile</p>
                 <hr />
                 <p onClick={logout}>Logout</p>
               </div>
