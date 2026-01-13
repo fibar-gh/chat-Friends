@@ -1,43 +1,94 @@
+/* Full page background with gradient */
 .login {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 100vh;
-  background: #f4f4f4;
+  background: linear-gradient(135deg, #6b8cff, #e9f5ff);
+  font-family: 'Poppins', sans-serif;
 }
 
+/* Login box */
 .login-container {
-  background: white;
-  padding: 2rem;
-  width: 320px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-}
-
-.login-container h2 {
+  background: #ffffff;
+  padding: 2.5rem 2rem;
+  width: 350px;
+  border-radius: 15px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.1);
   text-align: center;
-  margin-bottom: 1rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+.login-container:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+}
+
+/* Heading */
+.login-container h2 {
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Inputs */
 .login-container input {
   width: 100%;
+  padding: 12px 15px;
   margin-bottom: 1rem;
-  padding: 10px;
+  border-radius: 8px;
   border: 1px solid #ccc;
-  border-radius: 6px;
+  font-size: 14px;
+  transition: 0.3s;
 }
 
+.login-container input:focus {
+  outline: none;
+  border-color: #6b8cff;
+  box-shadow: 0 0 5px rgba(107,140,255,0.4);
+}
+
+/* Submit button */
 .login-container button {
   width: 100%;
-  padding: 10px;
-  background: #007bff;
-  color: white;
+  padding: 12px;
+  background: #6b8cff;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
+  color: white;
+  font-size: 16px;
+  font-weight: 500;
   cursor: pointer;
+  transition: 0.3s;
 }
 
+.login-container button:hover {
+  background: #5577e0;
+  transform: translateY(-2px);
+}
+
+/* Text under form */
 .login-container p {
-  text-align: center;
-  margin-top: 10px;
+  margin-top: 1rem;
+  font-size: 14px;
+  color: #555;
+}
+
+.login-container p a {
+  color: #6b8cff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-container p a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive for smaller screens */
+@media (max-width: 400px) {
+  .login-container {
+    width: 90%;
+    padding: 2rem 1.5rem;
+  }
 }
