@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useParams, useLocation } from "react-router-dom";
 import {
   doc,
   getDoc,
@@ -15,26 +14,17 @@ import assets from "../../assets/assets/assets";
 import { useUser } from "../../Context/UserContext";
 import { db } from "../../Config/firebaseConfig";
 import { uploadImage } from "../../uploadImage";
+import { IoArrowBack } from "react-icons/io5";
 
-function Chatbox() {
+function Chatbox({ chatId, chatUser, goBack, openInfo }) {
   const { profile } = useUser();
-  const { chatId } = useParams();
-  const location = useLocation();
-
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [imageFile, setImageFile] = useState(null);
-  const [chatUser, setChatUser] = useState(location.state?.chatUser || null);
-
   const messagesEndRef = useRef(null);
 
-  // 🔹 Reset messages and chatUser when chatId changes
-  useEffect(() => {
-    setMessages([]);
-    setChatUser(location.state?.chatUser || null);
-  }, [chatId, location.state?.chatUser]);
+  useEffect(() => setMessages([]), [chatId]);
 
-  // 🔹 Fetch messages in real-time
   useEffect(() => {
     if (!chatId) return;
 
@@ -43,75 +33,35 @@ function Chatbox() {
       orderBy("timestamp", "asc")
     );
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const msgs = snapshot.docs.map((doc) => doc.data());
-      setMessages(msgs);
+    const unsubscribe = onSnapshot(q, snapshot => {
+      setMessages(snapshot.docs.map(doc => doc.data()));
     });
 
     return () => unsubscribe();
   }, [chatId]);
 
-  // 🔹 Fetch chat user from Firestore to always have latest info
   useEffect(() => {
-    if (!chatId || !profile?.uid) return;
-
-    const fetchChatUser = async () => {
-      try {
-        const chatRef = doc(db, "chats", chatId);
-        const chatSnap = await getDoc(chatRef);
-        if (!chatSnap.exists()) return;
-
-        const chatData = chatSnap.data();
-        const otherUserId = chatData.participants.find((id) => id !== profile.uid);
-        if (!otherUserId) return;
-
-        const userRef = doc(db, "users", otherUserId);
-        const userSnap = await getDoc(userRef);
-        if (userSnap.exists()) {
-          setChatUser({
-            uid: otherUserId,
-            ...userSnap.data(),
-          });
-        }
-      } catch (err) {
-        console.error("Error fetching chat user:", err);
-      }
-    };
-
-    fetchChatUser();
-  }, [chatId, profile?.uid]);
-
-  // 🔹 Scroll to bottom when messages change
-  useEffect(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
-    }
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // 🔹 Send message (text or image)
   const handleSend = async (e) => {
-    if (e) e.preventDefault(); // prevent default Enter behavior
-    if ((!newMessage || !newMessage.trim()) && !imageFile) return;
-    if (!profile?.uid || !chatId) return;
+    e?.preventDefault();
+    if ((!newMessage.trim() && !imageFile) || !profile?.uid) return;
 
     let imageUrl = "";
-    try {
-      if (imageFile) {
-        imageUrl = await uploadImage(imageFile);
-        setImageFile(null);
-      }
-
-      await addDoc(collection(db, "chats", chatId, "messages"), {
-        text: newMessage || "",
-        imageUrl,
-        senderId: profile.uid,
-        timestamp: serverTimestamp(),
-      });
-
-      setNewMessage("");
-    } catch (error) {
-      console.error("Message Send Error:", error);
+    if (imageFile) {
+      imageUrl = await uploadImage(imageFile);
+      setImageFile(null);
     }
+
+    await addDoc(collection(db, "chats", chatId, "messages"), {
+      text: newMessage,
+      imageUrl,
+      senderId: profile.uid,
+      timestamp: serverTimestamp(),
+    });
+
+    setNewMessage("");
   };
 
   const handleImageChange = (e) => {
@@ -120,27 +70,25 @@ function Chatbox() {
 
   return (
     <div className="chat-box">
-      {/* === Top Section === */}
+
+      {/* HEADER */}
       <div className="chat-user">
+        <IoArrowBack className="back-arrow" onClick={goBack} />
         <img src={chatUser?.avatar || assets.profile_img} alt="profile" />
         <p>
           {chatUser?.name || chatUser?.username || "Chat"}
           <img src={assets.green_dot} className="dot" alt="" />
         </p>
-        <img src={assets.help_icon} alt="help-icon" className="help" />
+        <img src={assets.help_icon} alt="help" className="help" onClick={openInfo} />
       </div>
 
-      {/* === Chat Messages === */}
+      {/* MESSAGES */}
       <div className="chat-msg">
         {messages.map((msg, i) => {
-          const time = msg.timestamp?.seconds
-            ? new Date(msg.timestamp.seconds * 1000).toLocaleTimeString([], {
-                hour: "2-digit",
-                minute: "2-digit",
-              })
-            : "";
-
           const isSender = msg.senderId === profile.uid;
+          const time = msg.timestamp?.seconds
+            ? new Date(msg.timestamp.seconds * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+            : "";
 
           return (
             <div className={isSender ? "s-msg" : "r-msg"} key={i}>
@@ -155,11 +103,7 @@ function Chatbox() {
               </div>
               <div className="meta">
                 <img
-                  src={
-                    isSender
-                      ? profile.avatar || assets.profile_img
-                      : chatUser?.avatar || assets.profile_img
-                  }
+                  src={isSender ? profile.avatar || assets.profile_img : chatUser?.avatar || assets.profile_img}
                   alt=""
                 />
                 <p>{time}</p>
@@ -170,28 +114,22 @@ function Chatbox() {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* 🖼️ Image Preview */}
+      {/* IMAGE PREVIEW */}
       {imageFile && (
         <div className="image-preview">
           <p>Preview:</p>
-          <img
-            src={URL.createObjectURL(imageFile)}
-            alt="preview"
-            className="preview-img"
-          />
+          <img src={URL.createObjectURL(imageFile)} alt="preview" className="preview-img" />
         </div>
       )}
 
-      {/* === Chat Input === */}
+      {/* INPUT */}
       <div className="chat-input">
         <input
           type="text"
           placeholder="Send a message..."
           value={newMessage}
           onChange={(e) => setNewMessage(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter") handleSend(e);
-          }}
+          onKeyDown={(e) => e.key === "Enter" && handleSend(e)}
         />
         <input
           type="file"
@@ -203,12 +141,7 @@ function Chatbox() {
         <label htmlFor="image">
           <img src={assets.gallery_icon} alt="gallery" />
         </label>
-        <img
-          src={assets.send_button}
-          alt="send"
-          onClick={handleSend}
-          className="send-btn"
-        />
+        <img src={assets.send_button} alt="send" className="send-btn" onClick={handleSend} />
       </div>
     </div>
   );

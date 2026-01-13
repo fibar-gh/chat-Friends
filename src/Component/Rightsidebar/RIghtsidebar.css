@@ -4,6 +4,7 @@
     height: 75vh;
     position: relative;
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 .rs-profile{
     padding-top: 60px;
@@ -38,10 +39,11 @@
 .rs-media{
     padding: 0px 20px;
     font-size: 13px;
+    
 }
 .rs-media div{
     max-height: 180px;
-    overflow-x: scroll;
+    overflow-x: hidden;
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 5px;
@@ -66,3 +68,32 @@
     border-radius: 20px;
 
 }
+ 
+
+/* Hide back arrow by default (desktop) */
+.rs-header {
+  display: none;
+}
+
+/* Show on mobile only */
+@media (max-width: 768px) {
+  .rs-header {
+    display: block;
+    position: absolute;
+   
+    top: 60px;
+    left: 20px;
+    z-index: 10;
+    background: transparent;
+  }
+
+  .back-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+}
+

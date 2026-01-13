@@ -144,3 +144,38 @@
     max-width: 200px;
     border-radius: 8px;
 }
+
+
+    /* Back Arrow */
+.back-arrow {
+  font-size: 22px;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+/* Info button */
+.info-btn {
+  width: 24px;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.back-arrow {
+  font-size: 22px;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+
+
+
+/* Hide on desktop */
+@media (min-width: 769px) {
+  .back-arrow,
+  .info-btn {
+    display: none;
+  }
+  .back-arrow {
+    display: none;
+  }
+}

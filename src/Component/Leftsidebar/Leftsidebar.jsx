@@ -2,15 +2,13 @@ import './Leftsidebar.css';
 import assets from '../../assets/assets/assets';
 import { useState, useEffect } from 'react';
 import { useUser } from '../../Context/UserContext';
-import { useNavigate } from 'react-router-dom';
 import { addDoc, getDocs, collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db } from '../../Config/firebaseConfig';
 
-function Leftsidebar() {
+function Leftsidebar({ onFriendClick }) {
   const { logout, profile, addFriend } = useUser();
   const [showMenu, setShowMenu] = useState(false);
   const [friends, setFriends] = useState([]);
-  const navigate = useNavigate();
 
   // Toggle dropdown
   const handleToggleMenu = () => setShowMenu(prev => !prev);
@@ -46,19 +44,17 @@ function Leftsidebar() {
       if (doc.data().participants.includes(friend.uid)) existingChat = doc.id;
     });
 
-    if (existingChat) {
-      navigate(`/chat/${existingChat}`, { state: { chatUser: friend } });
-      return;
-    }
+    const chatId = existingChat
+      ? existingChat
+      : (await addDoc(collection(db, "chats"), {
+          participants: [profile.uid, friend.uid],
+          createdAt: new Date(),
+          lastMessage: "",
+          timestamp: new Date(),
+        })).id;
 
-    const chatRef = await addDoc(collection(db, "chats"), {
-      participants: [profile.uid, friend.uid],
-      createdAt: new Date(),
-      lastMessage: "",
-      timestamp: new Date(),
-    });
-
-    navigate(`/chat/${chatRef.id}`, { state: { chatUser: friend } });
+    // ❌ Use callback instead of navigate
+    onFriendClick({ chatId, ...friend });
   };
 
   // Add friend by username
@@ -86,7 +82,7 @@ function Leftsidebar() {
             <img src={assets.menu_icon} className="menu-icon" alt="Menu Icon" onClick={handleToggleMenu} />
             {showMenu && (
               <div className="sub-menu">
-                <p onClick={() => navigate('/profile')}>Edit Profile</p>
+                <p>Edit Profile</p>
                 <hr />
                 <p onClick={logout}>Logout</p>
               </div>

@@ -2,8 +2,10 @@ import React from "react";
 import "./Rightsidebar.css";
 import assets from "../../assets/assets/assets";
 import { useUser } from "../../Context/UserContext";
+import { IoArrowBack } from "react-icons/io5";
 
-function Rightsidebar({ chatUser }) {
+
+function Rightsidebar({ chatUser, goBack }) {
   const { logout } = useUser();
 
   if (!chatUser) {
@@ -16,7 +18,17 @@ function Rightsidebar({ chatUser }) {
 
   return (
     <div className="rs">
-      {/* === Chat User Profile === */}
+      {/* ===== BACK ARROW FOR MOBILE ONLY ===== */}
+      {goBack && (
+  <div className="rs-header">
+    <button className="back-btn" onClick={goBack}>
+      <IoArrowBack />
+    </button>
+  </div>
+)}
+
+
+      {/* ===== CHAT USER PROFILE ===== */}
       <div className="rs-profile">
         <img src={chatUser.avatar || assets.profile_img} alt={chatUser.name} />
         <h3>
@@ -28,7 +40,7 @@ function Rightsidebar({ chatUser }) {
 
       <hr />
 
-      {/* === Media Section (later dynamic) === */}
+      {/* ===== MEDIA ===== */}
       <div className="rs-media">
         <h4>Media</h4>
         <div>
@@ -38,7 +50,7 @@ function Rightsidebar({ chatUser }) {
         </div>
       </div>
 
-      {/* === Logout === */}
+      {/* ===== LOGOUT ===== */}
       <button onClick={logout}>Log Out</button>
     </div>
   );

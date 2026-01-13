@@ -12,3 +12,44 @@
     display: grid;
     grid-template-columns: 1fr 2fr 1fr;
 }
+
+
+@media (max-width: 768px) {
+  .chat-container {
+    grid-template-columns: 1fr;
+    height: 100vh;
+    width: 100%;
+    max-width: none;
+  }
+
+  /* Hide sidebars on mobile */
+  .panel.left,
+  .panel.right {
+    display: none;
+  }
+
+  /* Show panel when active */
+  .panel.show {
+    display: block;
+  }
+
+  /* Overlay behavior */
+  .panel.left,
+  .panel.right {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    background: #fff;
+    z-index: 1000;
+    overflow-y: auto;
+  }
+
+  .panel.left {
+    left: 0;
+  }
+
+  .panel.right {
+    right: 0;
+  }
+}

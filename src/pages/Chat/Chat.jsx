@@ -1,24 +1,57 @@
-import Chatbox from '../../Component/Chatbox/Chatbox'
-import Leftsidebar from '../../Component/Leftsidebar/Leftsidebar'
-import Rightsidebar from '../../Component/Rightsidebar/Rightsidebar'
-import { useLocation } from "react-router-dom";
-
-import './chat.css'
+import { useState } from "react";
+import Chatbox from "../../Component/Chatbox/Chatbox";
+import Leftsidebar from "../../Component/Leftsidebar/Leftsidebar";
+import Rightsidebar from "../../Component/Rightsidebar/Rightsidebar";
+import "./chat.css";
 
 const Chat = () => {
-    const location = useLocation();
-  const chatUser = location.state?.chatUser;
+  // Panel state: left, chat, right
+  const [activePanel, setActivePanel] = useState("left");
+
+  // Selected chat state
+  const [currentChatId, setCurrentChatId] = useState(null);
+  const [currentChatUser, setCurrentChatUser] = useState(null);
 
   return (
-    <div className='chat'>
-        <div className='chat-container'>
-          <Leftsidebar/>
-          <Chatbox/>
-      <Rightsidebar chatUser={chatUser} />
+    <div className="chat">
+      <div className="chat-container">
 
+        {/* LEFT PANEL */}
+        <div className={`panel left ${activePanel === "left" ? "show" : ""}`}>
+          <Leftsidebar
+            onFriendClick={({ chatId, ...friend }) => {
+              setCurrentChatId(chatId);
+              setCurrentChatUser(friend);
+              setActivePanel("chat"); // show chat panel
+            }}
+          />
         </div>
-    </div>
-  )
-}
 
-export default Chat
+        {/* CHAT BOX */}
+        <div className={`panel chatbox ${activePanel === "chat" ? "show" : ""}`}>
+          {currentChatId && currentChatUser && (
+            <Chatbox
+              chatId={currentChatId}
+              chatUser={currentChatUser}
+              goBack={() => setActivePanel("left")}
+              openInfo={() => setActivePanel("right")}
+            />
+          )}
+        </div>
+
+        {/* RIGHT PANEL */}
+        <div className={`panel right ${activePanel === "right" ? "show" : ""}`}>
+  {currentChatUser && (
+    <Rightsidebar
+      chatUser={currentChatUser}   // pass the current chat user
+      goBack={() => setActivePanel("chat")} // back arrow toggles back to chat panel
+    />
+  )}
+</div>
+
+      </div>
+    </div>
+  );
+};
+
+export default Chat;
