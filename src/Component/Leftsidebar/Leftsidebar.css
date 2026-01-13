@@ -1,112 +1,203 @@
-.ls{
-    background: #001030;
-    color: white;
-    height: 75vh;
+/* Container */
+.ls {
+  background: #001030;
+  color: white;
+  height: 75vh;
+  display: flex;
+  flex-direction: column;
+  border-radius: 10px;
+  overflow: hidden;
+  font-family: 'Poppins', sans-serif;
 }
-.ls-top{
-    padding: 20px;
-}
-.ls-nav{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.ls-nav .logo{
-    max-width: 140px;
 
+/* Top section with logo and menu */
+.ls-top {
+  padding: 15px 20px;
 }
-.ls-nav .menu{
-    position: relative;
-    padding: 10px 0px;
+
+.ls-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.menu .sub-menu{
-    position: absolute;
-    top: 100%;
-    right: 0;
-    width: 120px;
-    padding: 20px;
-    border-radius: 5px;
-    color: black;
-    background-color: white;
-    display: none;
+
+.ls-nav .logo {
+  max-width: 120px;
 }
-.sub-menu hr{
-    border: none;
-    height: 1px;
-    background-color: #a4a4a4;
-    margin: 8px 0px;
+
+/* Menu */
+.ls-nav .menu {
+  position: relative;
 }
-.sub-menu p{
-    font-size: 14px;
-    cursor: pointer;
+
+.menu img {
+  width: 20px;
+  cursor: pointer;
+  opacity: 0.8;
+  transition: opacity 0.2s;
 }
-.menu:hover .sub-menu{
-    display: block;
+
+.menu img:hover {
+  opacity: 1;
 }
-.ls-nav .menu img{
-    max-height: 20px;
-    opacity: 0.6;
-    cursor: pointer;
+
+/* Dropdown menu */
+.menu .sub-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  width: 140px;
+  background-color: white;
+  color: #333;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  padding: 10px 0;
+  display: none;
+  z-index: 100;
 }
-.ls-search{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
-    margin-top: 20px;
-    background-color: #002670;
+
+.menu:hover .sub-menu {
+  display: block;
 }
-.ls-search img{
-    width: 16px;
+
+.sub-menu p {
+  font-size: 14px;
+  padding: 8px 15px;
+  cursor: pointer;
+  transition: background 0.2s;
 }
-.ls-search input{
-    background-color: transparent;
-    border: none;
-    outline:none;
-    color: white;
-    font-size: 11px;
+
+.sub-menu p:hover {
+  background-color: #077eff;
+  color: white;
 }
-.ls-search input::placeholder{
-    color: #c8c8c8;
+
+.sub-menu hr {
+  border: none;
+  height: 1px;
+  background-color: #ddd;
+  margin: 5px 0;
 }
-.ls-list{
-    display: flex;
-    flex-direction: column;
-    height: 70%;
-    overflow-y: scroll;
+
+/* Search bar */
+.ls-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 15px;
+  padding: 8px 12px;
+  background-color: #002670;
+  border-radius: 10px;
 }
-.friends{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 20px;
-    font-size: 13px;
-    cursor: pointer;
-    margin-left: 20px;
-    margin-right: 20px;
+
+.ls-search img {
+  width: 16px;
 }
-.friends img{
-    width: 35px;
-    border-radius: 50%;
-    aspect-ratio: 1/1;
+
+.ls-search input {
+  background-color: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 13px;
+  flex: 1;
 }
-.friends div{
-    display: flex;
-    flex-direction: column;
+
+.ls-search input::placeholder {
+  color: #c8c8c8;
+  font-size: 12px;
 }
-.friends span{
-    color: #9f9f9f9f;
-    font-size: 11px;
+
+/* Friend list */
+.ls-list {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow-y: auto;
+  padding: 10px 0;
+  gap: 5px;
 }
-.friends:hover{
-    background-color: #077EFF;
+
+/* Friend card */
+.friends {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 15px;
+  margin: 0 10px;
+  border-radius: 10px;
+  transition: background 0.2s;
 }
-.friends:hover span{
-    color: white;
+
+.friends:hover {
+  background-color: #077EFF;
 }
+
+.friends img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  aspect-ratio: 1/1;
+  border: 2px solid #fff;
+}
+
+.friends div {
+  display: flex;
+  flex-direction: column;
+}
+
+.friends p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.friends span {
+  color: #c0c0c0;
+  font-size: 12px;
+}
+
+/* No friends text */
 .no-chat {
   text-align: center;
-  color: gray;
-  padding: 10px;
+  color: #888;
+  padding: 15px;
   font-size: 0.9rem;
+}
+
+/* Scrollbar styling */
+.ls-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.ls-list::-webkit-scrollbar-thumb {
+  background-color: rgba(255,255,255,0.3);
+  border-radius: 3px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .ls {
+    height: 100vh;
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .ls-top {
+    padding: 10px 15px;
+  }
+
+  .friends {
+    padding: 10px 15px;
+  }
+
+  .friends img {
+    width: 35px;
+    height: 35px;
+  }
+
+  .ls-search input {
+    font-size: 16px;
+  }
 }
