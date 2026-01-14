@@ -44,6 +44,7 @@ const Chat = () => {
   {currentChatUser && (
     <Rightsidebar
       chatUser={currentChatUser}   // pass the current chat user
+      chatId={currentChatId}       // pass the current chat ID
       goBack={() => setActivePanel("chat")} // back arrow toggles back to chat panel
     />
   )}

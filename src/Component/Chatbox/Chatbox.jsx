@@ -74,7 +74,7 @@ function Chatbox({ chatId, chatUser, goBack, openInfo }) {
       {/* HEADER */}
       <div className="chat-user">
         <IoArrowBack className="back-arrow" onClick={goBack} />
-        <img src={chatUser?.avatar || assets.profile_img} alt="profile" />
+        <img src={chatUser?.avatar || assets.profile_img} className="avatar" alt="profile" />
         <p>
           {chatUser?.name || chatUser?.username || "Chat"}
           <img src={assets.green_dot} className="dot" alt="" />

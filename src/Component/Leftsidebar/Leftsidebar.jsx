@@ -10,7 +10,8 @@ function Leftsidebar({ onFriendClick }) {
   const { logout, profile, addFriend } = useUser();
   const [showMenu, setShowMenu] = useState(false);
   const [friends, setFriends] = useState([]);
-  const navigate= useNavigate();
+  const [searchQuery, setSearchQuery] = useState(""); // ✅ search state
+  const navigate = useNavigate();
 
   // Toggle dropdown
   const handleToggleMenu = () => setShowMenu(prev => !prev);
@@ -29,6 +30,7 @@ function Leftsidebar({ onFriendClick }) {
     const unsubscribe = onSnapshot(q, snapshot => {
       const friendList = snapshot.docs.map(doc => ({
         uid: doc.id,
+        bio: doc.data().bio || "",
         name: doc.data().name,
         username: doc.data().username,
         avatar: doc.data().avatar || assets.profile_img,
@@ -59,7 +61,6 @@ function Leftsidebar({ onFriendClick }) {
           timestamp: new Date(),
         })).id;
 
-    // ❌ Use callback instead of navigate
     onFriendClick({ chatId, ...friend });
   };
 
@@ -79,6 +80,12 @@ function Leftsidebar({ onFriendClick }) {
     alert("Friend added successfully");
   };
 
+  // 🔹 Filtered friends based on search
+  const filteredFriends = friends.filter(friend =>
+    friend.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    friend.username.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="ls">
       <div className="ls-top">
@@ -96,24 +103,29 @@ function Leftsidebar({ onFriendClick }) {
           </div>
         </div>
 
+        {/* SEARCH INPUT */}
         <div className="ls-search">
           <img src={assets.search_icon} alt="Search Icon" />
           <input
             type="text"
-            placeholder="Enter username"
+            placeholder="Search friends..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)} // ✅ live search
             onKeyDown={(e) => {
               if (e.key === "Enter") {
                 addFriendByUsername(e.target.value);
-                e.target.value = "";
+                setSearchQuery(""); // clear after adding
               }
             }}
           />
         </div>
       </div>
 
+      {/* FRIEND LIST */}
       <div className="ls-list">
-        {friends.length === 0 && <p className="no-chat">No friends yet.</p>}
-        {friends.map(friend => (
+        {filteredFriends.length === 0 && <p className="no-chat">No friends found.</p>}
+
+        {filteredFriends.map(friend => (
           <div key={friend.uid} className="friends" onClick={() => openChatWithFriend(friend)}>
             <img src={friend.avatar || assets.profile_img} alt="Friend" />
             <div>
